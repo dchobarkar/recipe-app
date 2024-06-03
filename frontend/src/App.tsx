@@ -1,11 +1,12 @@
 import React, { FormEvent, useState } from "react";
 
+import RecipeCard from "./components/RecipeCard";
 import * as api from "./api";
 import { Recipe } from "./types";
 import "./App.css";
 
 const App = () => {
-  const [searchTerm, setSearchTerm] = useState("burger");
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
   const handleSearchSubmit = async (event: FormEvent) => {
@@ -22,14 +23,18 @@ const App = () => {
   return (
     <div>
       <form onSubmit={(event) => handleSearchSubmit(event)}>
+        <input
+          type="text"
+          required
+          placeholder="Enter a search term ..."
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
+        ></input>
         <button type="submit">Submit</button>
       </form>
 
       {recipes.map((recipe) => {
-        <div>
-          recipe image location: {recipe.image}
-          recipe title: {recipe.title}
-        </div>;
+        return <RecipeCard recipe={recipe} />;
       })}
     </div>
   );
