@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useRef, useState } from "react";
 
 import RecipeCard from "./components/RecipeCard";
 import * as api from "./api";
@@ -8,6 +8,7 @@ import "./App.css";
 const App = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const pageNumber = useRef(1);
 
   const handleSearchSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -17,6 +18,17 @@ const App = () => {
       setRecipes(recipes.results);
     } catch (e) {
       console.log(e);
+    }
+  };
+
+  const handleViewMoreClick = async () => {
+    const nextPage = pageNumber.current + 1;
+    try {
+      const nextRecipes = await api.searchRecipes(searchTerm, nextPage);
+      setRecipes([...recipes, ...nextRecipes.results]);
+      pageNumber.current = nextPage;
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -36,6 +48,10 @@ const App = () => {
       {recipes.map((recipe) => {
         return <RecipeCard recipe={recipe} />;
       })}
+
+      <button className="view-more-button" onClick={handleViewMoreClick}>
+        View More
+      </button>
     </div>
   );
 };
