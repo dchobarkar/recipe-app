@@ -1,12 +1,13 @@
+import { PrismaClient } from "@prisma/client";
 import express from "express";
 import cors from "cors";
-import { PrismaClient } from "@prisma/client";
+import "dotenv/config";
 
 import * as RecipeAPI from "./recipe-api";
 
 const prismaClient = new PrismaClient();
-const app = express();
 
+const app = express();
 app.use(express.json());
 app.use(cors());
 

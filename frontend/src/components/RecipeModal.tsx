@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import * as RecipeAPI from "../api";
 import { RecipeSummary } from "../types";
+import * as RecipeAPI from "../api";
 
 interface Props {
   recipeId: string;
@@ -24,19 +24,22 @@ const RecipeModal = ({ recipeId, onClose }: Props) => {
     fetchRecipeSummary();
   }, [recipeId]);
 
-  if (!recipeSummary) return;
+  if (!recipeSummary) return <></>;
 
   return (
     <>
       <div className="overlay"></div>
+
       <div className="modal">
         <div className="modal-content">
           <div className="modal-header">
             <h2>{recipeSummary.title}</h2>
+
             <span className="close-btn" onClick={onClose}>
               &times;
             </span>
           </div>
+
           <p dangerouslySetInnerHTML={{ __html: recipeSummary.summary }}></p>
         </div>
       </div>
