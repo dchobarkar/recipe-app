@@ -4,7 +4,6 @@ export const searchRecipes = async (searchTerm: string, page: number) => {
   if (!apiKey) throw new Error("API Key not found");
 
   const url = new URL("https://api.spoonacular.com/recipes/complexSearch");
-
   const queryParams = {
     apiKey,
     query: searchTerm,
@@ -16,6 +15,7 @@ export const searchRecipes = async (searchTerm: string, page: number) => {
   try {
     const searchResponse = await fetch(url);
     const resultsJson = await searchResponse.json();
+
     return resultsJson;
   } catch (error) {
     console.log(error);
@@ -37,4 +37,20 @@ export const getRecipeSummary = async (recipeId: string) => {
   const json = await response.json();
 
   return json;
+};
+
+export const getFavouriteRecipesByIDs = async (ids: string[]) => {
+  if (!apiKey) throw new Error("API Key not found");
+
+  const url = new URL("https://api.spoonacular.com/recipes/informationBulk");
+  const params = {
+    apiKey: apiKey,
+    ids: ids.join(","),
+  };
+  url.search = new URLSearchParams(params).toString();
+
+  const searchResponse = await fetch(url);
+  const json = await searchResponse.json();
+
+  return { results: json };
 };
